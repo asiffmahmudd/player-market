@@ -10,14 +10,16 @@ function App() {
   const [cart, setCart] = useState([]);
 
   useEffect(()=>{
-    fetch('https://api.mocki.io/v1/b833cff0')
+    fetch('https://run.mocky.io/v3/01635460-b47a-42cf-8e6a-712e87cde4a9')
     .then(response => response.json())
-    .then(data => setPlayers(data));
+    .then(data => {
+      data.map((item,index) => item.id = index)
+      setPlayers(data)
+    });
   },[]);
 
   const addPlayer = (player) => {
     const existingPlayer = cart.find(pl => player.id === pl.id);
-    console.log(existingPlayer);
     if(existingPlayer){
       alert("You have already added this player to your list");
     }
@@ -26,10 +28,15 @@ function App() {
       setCart(updatedCart);
     }
   }
+  console.log(cart)
+  const removePlayer = (id) => {
+    const newList = cart.filter(item => item.id !== id)
+    setCart(newList)
+  }
 
   return (
     <div className="App">
-      <Header totalPlayer={players.length} cart={cart} ></Header>
+      <Header totalPlayer={players.length} cart={cart} removePlayer={removePlayer}></Header>
       <div className="container ">
         <div className="row">
 
